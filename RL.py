@@ -62,21 +62,36 @@ class finiteMDP:
 
             
     def traces2Q(self, trace):
-                # implementar esta funcao
+        self.Q=np.zeros((self.nS, self.nA))
+        g=self.gamma
         
-
+        for state in trace:
+            s=state[0]
+            a=state[1]
+            fs=state[2]
+            r=state[3]
+            
+            self.Q[s,a]+=(r+g*np.amax(self.Q[fs])-self.Q[s,a])
+            
         return self.Q
     
     def policy(self, x, poltype = 'exploration', par = []):
         # implementar esta funcao
         
+        if len(par)==0:
+            par=self.Q
+        
+        
         if poltype == 'exploitation':
-            pass
-
+            a = np.amax(par[x])
+            
+            
             
         elif poltype == 'exploration':
-            pass
-
+            atemp = random.sample(list(par[x]), 1)
+            a = atemp[0]
+            print(a)
+            
                 
         return a
     
