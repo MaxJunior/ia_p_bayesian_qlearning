@@ -2,9 +2,13 @@
 """
 Created on Mon Oct 15 15:51:49 2018
 
-@author: mlopes
+ALAMEDA CAMPUS
+AI Project - Group 60
+Rui Goncalves  - 69586
+Maxwell Junior - 79457
+      
 """
-
+import itertools
 
 
 class Node():
@@ -62,20 +66,88 @@ class BN():
         self.nodes = prob # contem os nos
 
     def computePostProb(self, evid):
-        pass
-    
-        return 0
+        """ get the index of the prob requested """
+        postProb_index = get_index_PostProb(evid)
+        """ get the list of unknown prob"""
+        unKnown_index_list = get_index_UnknownProb(evid)
         
+        """  if there isnt a  post probability to compute  return the join prob of the evidence"""
+        if postProb_index ==  -1 and unKnown_index_list == [] :
+            return self.computeJointProb(evid)
+    
+        numb_unKnown_prob = len(unKnown_index_list)
+        combo_list = get_n_combinations(numb_unKnown_prob)
+        
+        true_prob = 0.0
+        false_prob = 0.0
+        """ case the post_probability is True and False """
+        for combo in combo_list:
+       
+           ev1 = new_evidence_method(1,evid,combo,unKnown_index_list,postProb_index)
+           ev2 = new_evidence_method(0,evid,combo,unKnown_index_list,postProb_index)
+           true_prob += self.computeJointProb(ev1)
+           false_prob += self.computeJointProb(ev2)
+           
+           
+        alfa =  1.0 / (true_prob + false_prob )
+                
+    
+        return alfa * true_prob
+    
+    
+    
+    
         
     def computeJointProb(self, evid):
         result= 1.0
         print(evid)
         for index in range(len(self.nodes)) :
             
-            print("Killmonger : ", self.nodes[index].computeProb(evid)[evid[index]])
+        #    print("Killmonger : ", self.nodes[index].computeProb(evid)[evid[index]])
             result  *=  self.nodes[index].computeProb(evid)[evid[index]]
             
         return result
+
+""" get the index of the prob requested """
+def get_index_PostProb(evid):
+    index = -1
+    for index in range(len(evid)):
+        if evid[index] == -1:
+            return index
         
-        
-        
+""" get the index of prob that are unknown """
+def get_index_UnknownProb(evid):
+    unknown_index_list = []
+    
+    for index in range(len(evid)):
+        if evid[index] == [] :
+            unknown_index_list.append(index)
+            
+    return unknown_index_list
+def  get_n_combinations( n):
+    
+      combo = list(itertools.product(range(2), repeat= n))
+
+     # print(combo)
+      return combo
+
+def iterate_over(n):    
+    my_list_elem = get_n_combinations(n)
+    
+    for el in my_list_elem :
+        return el
+
+def iterate_over_tuple(t_elem):
+    for index in range(len(t_elem)):
+        print(t_elem[index])
+
+
+def new_evidence_method(post_case,evidencias, unknown, indexes, requested_prob):
+    unknown = list(unknown)
+    new_evidencias = list(evidencias)
+    for index in range(len(unknown)) :
+        new_evidencias[indexes[index]] = unknown[index]
+    
+    new_evidencias[requested_prob] = post_case
+    
+    return list(new_evidencias)
