@@ -93,10 +93,7 @@ class BN():
                 
     
         return alfa * true_prob
-    
-    
-    
-    
+       
         
     def computeJointProb(self, evid):
         result= 1.0
@@ -124,24 +121,28 @@ def get_index_UnknownProb(evid):
             unknown_index_list.append(index)
             
     return unknown_index_list
+
 def  get_n_combinations( n):
-    
+    """
+       given  a n : generate all the 2^n combo of 0s and 1s
+    """
       combo = list(itertools.product(range(2), repeat= n))
 
      # print(combo)
       return combo
 
-def iterate_over(n):    
-    my_list_elem = get_n_combinations(n)
-    
-    for el in my_list_elem :
-        return el
 
 def iterate_over_tuple(t_elem):
     for index in range(len(t_elem)):
         print(t_elem[index])
 
-
+""" creates a new evidence given :
+    post_case : 0 or 1, to calculte the logic value of post probability
+    evidencias : the evidence 
+    unknown : tuple with a combo of the an unkown prob
+    indexes: index of the the unknown probability
+    requested_prob : the index of the post probability requested in 
+"""
 def new_evidence_method(post_case,evidencias, unknown, indexes, requested_prob):
     unknown = list(unknown)
     new_evidencias = list(evidencias)
