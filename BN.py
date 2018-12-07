@@ -42,22 +42,6 @@ class Node():
     def deep_copy(self,matrix):
         """ copy a matrix """    
         return [line[:] for line in matrix]
-    
-            
-    def prob_finder (self,lista, list_bool):
-       print("My bool_list : ", list_bool)
-       print("Prob_list  :", lista)
-      
-       for index in range(len(list_bool)):
-         
-         if(index < len(list_bool) - 1):
-           #  print("index : ", index)
-             lista = lista[list_bool[index]]
-             print("My list : ",lista)
-         else:
-             print("list_bool val : ", list_bool[index])
-             print("Probality requested : ", lista[list_bool[index]] )
-             return lista[list_bool[index]]
              
     
 class BN():
@@ -90,17 +74,15 @@ class BN():
            
            
         alfa =  1.0 / (true_prob + false_prob )
-                
-    
+                 
         return alfa * true_prob
-       
+    
         
     def computeJointProb(self, evid):
+        
         result= 1.0
-        print(evid)
         for index in range(len(self.nodes)) :
             
-        #    print("Killmonger : ", self.nodes[index].computeProb(evid)[evid[index]])
             result  *=  self.nodes[index].computeProb(evid)[evid[index]]
             
         return result
@@ -111,6 +93,7 @@ def get_index_PostProb(evid):
     for index in range(len(evid)):
         if evid[index] == -1:
             return index
+    return index
         
 """ get the index of prob that are unknown """
 def get_index_UnknownProb(evid):
@@ -123,18 +106,10 @@ def get_index_UnknownProb(evid):
     return unknown_index_list
 
 def  get_n_combinations( n):
-    """
-       given  a n : generate all the 2^n combo of 0s and 1s
-    """
+    
       combo = list(itertools.product(range(2), repeat= n))
 
-     # print(combo)
       return combo
-
-
-def iterate_over_tuple(t_elem):
-    for index in range(len(t_elem)):
-        print(t_elem[index])
 
 """ creates a new evidence given :
     post_case : 0 or 1, to calculte the logic value of post probability
